@@ -1,30 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
+import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Auth from "./Pages/Auth";
-import Profile from "./Pages/Profile";
-import Carousel from "./Components/Carousel/Carousel";
-import Chat from "./Pages/Chat";
-import ChatPages from "./Components/ChatPage/ChatPages";
-import Event from "./Pages/Events";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="auth" element={<Auth />} />
-        <Route path="users/:id" element={<Profile />} />
-        <Route path="events/:id" element={<Event />} />
-        <Route path="carousel" element={<Carousel />} />
-        <Route path="chat/:id" element={<Chat />} />
-        {/* <Route path="ChatPages" element={<ChatPages />} /> */}
-      </Routes>
-    </BrowserRouter>
+    <App />
   </React.StrictMode>
 );
 

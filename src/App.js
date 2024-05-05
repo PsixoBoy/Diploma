@@ -1,56 +1,33 @@
-import "./App.css";
-import { Link } from "react-router-dom";
 import React from "react";
-import Carousel from "./Components/Carousel/Carousel";
-import eventsData from "./Components/Carousel/eventsdata";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Auth from "./Pages/Auth";
+import Chat from "./Pages/Chat";
+import Event from "./Pages/Event";
+import EventCreate from "./Pages/EventCreate";
+import Main from "./Pages/Main";
+import Profile from "./Pages/Profile";
+import User from "./Pages/User";
+import { UserProvider } from "./hooks/useUser";
+
 
 function App() {
   return (
     <div className="App">
-      <header>
-        <div className="wrap">
-          <div>
-            <div>
-              <Link href="#">
-                <img src="logo.png" alt="" />
-              </Link>
-            </div>
-            <div>
-              <ul>
-                <li>
-                  <Link href="#">Главная</Link>
-                </li>
-                <li>
-                  <Link href="#">Тарифы</Link>
-                </li>
-                <li>
-                  <Link href="#">О нас</Link>
-                </li>
-                <li>
-                  <Link to="Auth">Регистрация</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </header>
-      <div className="wrapper">
-        <div className="content">
-          <div className="headline">
-            Найди себя
-            <br />
-            Своих друзей
-            <br />
-            Своих партнёров
-            <br />
-          </div>
-        </div>
-
-        <div className="sidebar">
-          Боковая панель она может распологаться как слева так и справа
-        </div>
-        <Carousel data={eventsData} />
-      </div>
+      <UserProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="auth" element={<Auth />} />
+            <Route path="users/:id" element={<User />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="events/:id" element={<Event />} /> 
+            <Route path="event/create" element={<EventCreate />} /> 
+            <Route path="chat" element={<Chat />} />
+            <Route path="chat/:id" element={<Chat />} />
+          </Routes>
+        </BrowserRouter>
+      </UserProvider>
     </div>
   );
 }

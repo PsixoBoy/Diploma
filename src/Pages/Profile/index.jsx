@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import Avatar from '../../Assets/Images/profile.jpg';
+import { updateAvatar } from "../../api";
+import { useUser } from "../../hooks/useUser";
+import { getImageURL } from "../../utils";
 import "./index.css";
-import { useParams } from "react-router-dom";
-import { getUser } from "../../api";
 
 const Profile = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState();
-  const params = useParams();
+  const {user} = useUser();
+  const [isLoading, setIsLoading] = useState(true)
+  const uploadRef = useRef();
 
-  useEffect(() => {
-    const getData = async () => {
-      if (!params.id) return;
-
-      const { data } = await getUser(params.id);
-      console.log(data);
-
-      setData(data);
-      setIsLoading(false);
-    };
-
-    getData();
-  }, []);
-
-  if (isLoading || !data) {
-    return <span>LOADING...</span>;
+  if (!user) {
+    return <p>LOADING...</p>
   }
 
-  const { name, lastName, email } = data;
+  const onAvatarChange = async (event) => {
+    try {
+      setIsLoading(true);
+      await updateAvatar(event.target.files[0])
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const { name, lastName, email, image } = user;
 
   return (
     <>
       <section className="main">
         <div className="profile-card">
-          <div className="image">
-            {/* <img src="images/profile.jpg" alt="" className="profile-pic"> */}
+          <div className="image" onClick={() => uploadRef.current?.click()}>
+            <input type="file" ref={uploadRef} formEncType="multipart/form-data" accept=".png" onChange={onAvatarChange} style={{display: 'none'}} />
+            <img src={image ? getImageURL(image) + `?t=${new Date().getTime()}` : Avatar} className="profile-pic" />
           </div>
           <div className="data">
             <h2>
@@ -54,11 +54,7 @@ const Profile = () => {
               <h3>Теги</h3>
               <span>Список тегов</span>
             </div>
-          </div>
-          <div className="buttons">
-            <a href={`/chat/${params.id}`} className="btn">
-              чат
-            </a>
+            <Link to={'/chat'}>Чат</Link>
           </div>
         </div>
       </section>

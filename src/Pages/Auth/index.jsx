@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login, signUp } from "../../api";
+import { useUser } from "../../hooks/useUser";
 import "./index.css";
-import { getEvents, login, signUp } from "../../api";
 
 const Auth = () => {
+  const [isRegistration, setIsRegistration] = useState(false);
   const [values, setValues] = useState({
     name: "",
     lastName: "",
@@ -10,6 +13,9 @@ const Auth = () => {
     password: "",
     passwordConfirm: "",
   });
+  const [error, setError] = useState('')
+  const {getUser} = useUser();
+  const navigate = useNavigate();
 
   const onChange = (field, event) => {
     const value = event.target.value;
@@ -22,63 +28,50 @@ const Auth = () => {
         email: values.email,
         password: values.password,
       });
-    } catch (err) {
-      console.log(err);
+      setError('')
+      await getUser();
+      navigate('/')
+    } catch (error) {
+      setError('Email or password is wrong')
+      console.log(error);
     }
   };
 
   const onRegistration = async () => {
     try {
-      const result = await signUp(values);
-      console.log(result);
+      await signUp(values);
+      setError('')
+      await getUser();
+      navigate('/')
     } catch (err) {
+      setError("Email or password is wrong")
       console.log(err);
     }
   };
+
+  const onSubmit = () => {
+    if (isRegistration) {
+      onRegistration();
+      Navigate({to: "Main"})
+    } else {
+      onAuth();
+    }
+  }
 
   return (
     <div className="register">
       <div className="Registraion_Form">
         <div className="container">
-          <input type="checkbox" id="check" />
           <div className="login form">
-            <header>Login</header>
+            <header>{isRegistration ? "Signup" : "Login"}</header>
             <form action="#">
               <input
                 type="text"
                 placeholder="Enter your email"
                 onChange={(e) => onChange("email", e)}
               />
-              <input
-                type="password"
-                placeholder="Enter your password"
-                onChange={(e) => onChange("password", e)}
-              />
-              <a href="#">Forgot password?</a>
-              <input
-                type="button"
-                className="button"
-                value="Login"
-                onClick={onAuth}
-              />
-            </form>
-            <div className="signup">
-              <span className="signup">
-                Don't have an account?
-                <label for="check">Signup</label>
-              </span>
-            </div>
-          </div>
-          <div className="registration form">
-            <header>Signup</header>
-            <form action="#">
-              <input
-                type="text"
-                placeholder="Enter your email"
-                value={values.email}
-                onChange={(e) => onChange("email", e)}
-              />
-              <input
+             {isRegistration && <>
+             <input
                 type="text"
                 placeholder="Name"
                 onChange={(e) => onChange("name", e)}
@@ -88,28 +81,29 @@ const Auth = () => {
                 placeholder="LastName"
                 onChange={(e) => onChange("lastName", e)}
               />
+              </>}
               <input
                 type="password"
-                placeholder="Create a password"
+                placeholder={isRegistration ? "Create a password" : "Enter your password"}
                 onChange={(e) => onChange("password", e)}
               />
-              <input
+             {isRegistration && <input
                 type="password"
                 placeholder="Confirm your password"
                 onChange={(e) => onChange("passwordConfirm", e)}
-              />
+              />}
+              {!!error && <span>{error}</span>}
               <input
                 type="button"
-                disabled={Object.values(values).some((str) => !str)}
-                onClick={onRegistration}
                 className="button"
-                value="Signup"
+                value={isRegistration ? "Sign up" : "Login"}
+                onClick={onSubmit}
               />
             </form>
-            <div className="signup">
+            <div className="signup" onClick={() => setIsRegistration(!isRegistration)}>
               <span className="signup">
-                Already have an account?
-                <label for="check">Login</label>
+                {isRegistration ? "Already have an account?" : "Don't have an account?"}
+                <label>Signup</label>
               </span>
             </div>
           </div>
