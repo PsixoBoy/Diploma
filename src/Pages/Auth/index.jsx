@@ -13,8 +13,8 @@ const Auth = () => {
     password: "",
     passwordConfirm: "",
   });
-  const [error, setError] = useState('')
-  const {getUser} = useUser();
+  const [error, setError] = useState("");
+  const { getUser } = useUser();
   const navigate = useNavigate();
 
   const onChange = (field, event) => {
@@ -28,11 +28,11 @@ const Auth = () => {
         email: values.email,
         password: values.password,
       });
-      setError('')
+      setError("");
       await getUser();
-      navigate('/')
+      navigate("/");
     } catch (error) {
-      setError('Email or password is wrong')
+      setError("Email or password is wrong");
       console.log(error);
     }
   };
@@ -40,11 +40,11 @@ const Auth = () => {
   const onRegistration = async () => {
     try {
       await signUp(values);
-      setError('')
+      setError("");
       await getUser();
-      navigate('/')
+      navigate("/");
     } catch (err) {
-      setError("Email or password is wrong")
+      setError("Email or password is wrong");
       console.log(err);
     }
   };
@@ -52,16 +52,16 @@ const Auth = () => {
   const onSubmit = () => {
     if (isRegistration) {
       onRegistration();
-      Navigate({to: "Main"})
+      navigate("/");
     } else {
       onAuth();
     }
-  }
+  };
 
   return (
     <div className="register">
       <div className="Registraion_Form">
-        <div className="container">
+        <div className="Authcontainer">
           <div className="login form">
             <header>{isRegistration ? "Signup" : "Login"}</header>
             <form action="#">
@@ -70,28 +70,34 @@ const Auth = () => {
                 placeholder="Enter your email"
                 onChange={(e) => onChange("email", e)}
               />
-             {isRegistration && <>
-             <input
-                type="text"
-                placeholder="Name"
-                onChange={(e) => onChange("name", e)}
-              />
-              <input
-                type="text"
-                placeholder="LastName"
-                onChange={(e) => onChange("lastName", e)}
-              />
-              </>}
+              {isRegistration && (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    onChange={(e) => onChange("name", e)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="LastName"
+                    onChange={(e) => onChange("lastName", e)}
+                  />
+                </>
+              )}
               <input
                 type="password"
-                placeholder={isRegistration ? "Create a password" : "Enter your password"}
+                placeholder={
+                  isRegistration ? "Create a password" : "Enter your password"
+                }
                 onChange={(e) => onChange("password", e)}
               />
-             {isRegistration && <input
-                type="password"
-                placeholder="Confirm your password"
-                onChange={(e) => onChange("passwordConfirm", e)}
-              />}
+              {isRegistration && (
+                <input
+                  type="password"
+                  placeholder="Confirm your password"
+                  onChange={(e) => onChange("passwordConfirm", e)}
+                />
+              )}
               {!!error && <span>{error}</span>}
               <input
                 type="button"
@@ -100,9 +106,14 @@ const Auth = () => {
                 onClick={onSubmit}
               />
             </form>
-            <div className="signup" onClick={() => setIsRegistration(!isRegistration)}>
+            <div
+              className="signup"
+              onClick={() => setIsRegistration(!isRegistration)}
+            >
               <span className="signup">
-                {isRegistration ? "Already have an account?" : "Don't have an account?"}
+                {isRegistration
+                  ? "Already have an account?"
+                  : "Don't have an account?"}
                 <label>Signup</label>
               </span>
             </div>

@@ -3,28 +3,3 @@
   flex: 1;
   flex-direction: column;
 }
-
-/* wrapper start*/
-.wrapper {
-  margin: 0 auto;
-  width: 960px;
-  }
-/* wrapper end*/
-
-/* content start*/
-.content {
-  display: inline-block;
-  width: 698px;
-  vertical-align: top;
-  border: 1px solid #000;
-  }
-/* content end*/
-
-/* sidebar start*/
-.sidebar {
-   display: inline-block;
-   width: 258px;
-   vertical-align: top;
-   border: 1px solid #ccc;
-   }
-/* sidebar end*/

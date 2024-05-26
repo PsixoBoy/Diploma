@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const BASE_URL = "http://192.168.1.75:5000";
-
+export const BASE_URL = "http://192.168.0.61:5000";
+//export const BASE_URL = "http://10.3.1.11:5000";
 const instance = axios.create({
   baseURL: BASE_URL,
 });
@@ -56,43 +56,67 @@ export const getEvent = (id) => {
 };
 
 export const createEvent = (data) => {
-  return instance.post('/events', data);
+  return instance.post("/events", data);
 };
 
 export const addEventImage = (id, file) => {
   const formData = new FormData();
-  formData.append('file',file);
-  formData.append('fileName',file.name);
+  formData.append("file", file);
+  formData.append("fileName", file.name);
   return instance.post(`/event_image/${id}`, formData, {
-    headers: {"Content-Type": "multipart/form-data"}
+    headers: { "Content-Type": "multipart/form-data" },
   });
 };
 
 export const joinEvent = (eventId) => {
-  return instance.post('/event-join', {eventId})
-}
+  return instance.post("/event-join", { eventId });
+};
 
 export const leaveEvent = (eventId) => {
-  return instance.post('/event-leave', {eventId})
-}
+  return instance.post("/event-leave", { eventId });
+};
 
 export const getMe = async () => {
-  return instance.get('/me')
-}
+  return instance.get("/me");
+};
 
 export const searchUser = (value) => {
-  return instance.post("/users/search", {value});
+  return instance.post("/users/search", { value });
 };
 
 export const updateAvatar = async (file) => {
   const formData = new FormData();
-  formData.append('file',file);
-  formData.append('fileName',file.name);
-  return instance.post('/me/photo', formData, {
-    headers: {"Content-Type": "multipart/form-data"}
-  })
-}
+  formData.append("file", file);
+  formData.append("fileName", file.name);
+  return instance.post("/me/photo", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
 
 export const getUser = async (id) => {
   return instance.get(`/users/${id}`);
+};
+
+export const saveBadgeTemplate = ({ eventId, template }) => {
+  return instance.post("/badge/save", { eventId, template });
+};
+
+export const generateBadgePDF = ({ eventId, userId }) => {
+  return instance.get(`/badge/generate/${eventId}/${userId}`, {
+    responseType: "blob",
+  });
+};
+export const inviteUser = ({ eventId, userId }) => {
+  return instance.post("/event-invite", { eventId, userId });
+};
+
+export const requestToJoin = ({ eventId }) => {
+  return instance.post("/event-request", { eventId });
+};
+
+export const respondToRequest = ({ eventId, userId, approve }) => {
+  return instance.post("/event-respond", { eventId, userId, approve });
+};
+export const acceptInvite = ({ eventId }) => {
+  return instance.post("/event-accept", { eventId });
 };

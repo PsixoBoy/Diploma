@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Avatar from '../../Assets/Images/profile.jpg';
+import Avatar from "../../Assets/Images/profile.jpg";
 import { getUser } from "../../api";
 import { getImageURL } from "../../utils";
 import "./index.css";
@@ -33,7 +33,11 @@ const User = () => {
       <section className="main">
         <div className="profile-card">
           <div className="image">
-            <img src={image ? getImageURL(image) : Avatar} alt="" className="profile-pic" />
+            <img
+              src={image ? getImageURL(image) : Avatar}
+              alt=""
+              className="profile-pic"
+            />
           </div>
           <div className="data">
             <h2>
